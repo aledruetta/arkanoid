@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+}
+
+#playground {
+    position: relative;
+    margin: 0 auto;
+    background-color: black;
+}
+
+#ship {
+    position: absolute;
+    background-color: yellow;
+}
+
+.block {
+    position: absolute;
+}
