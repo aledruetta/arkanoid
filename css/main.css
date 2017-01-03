@@ -11,8 +11,25 @@
 #ship {
     position: absolute;
     background-color: yellow;
+    border-radius: 25%;
+    box-shadow: 0 0 4px white;
+}
+
+#ball {
+    position: absolute;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    box-shadow: 0 1px 4px 0 red;
 }
 
 .block {
-    position: absolute;
+    display: block;
+    border: 1px solid white;
+    border-radius: 2px;
 }
