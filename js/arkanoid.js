@@ -16,7 +16,7 @@ function App() {
             speed: 10
         },
         ball: {
-            diameter: 15,
+            diameter: 10,
             speed: 5,
             x: 0,
             y: 0
@@ -51,7 +51,6 @@ function App() {
 
     function renderShip() {
 
-        var playground = arkanoid.playground;
         var ship = arkanoid.ship;
 
         $('#ship').css({
@@ -64,8 +63,8 @@ function App() {
         var ball = arkanoid.ball;
 
         $('#ball').css({
-            'width': ball.diameter,
-            'height': ball.diameter
+            'top': ball.y,
+            'left': ball.x
         });
     }
 
@@ -96,22 +95,37 @@ function App() {
 
         $('.block').css({
             'width':  (playground.width / block.blocksPerLine) - block.margin * 2,
-            'height': (block.height) - block.margin * 2,
+            'height': block.height - block.margin * 2,
             'margin': block.margin + 'px'
         });
     }
 
-    function resetShip() {
+    function reset() {
 
         var playground = arkanoid.playground;
         var ship = arkanoid.ship;
+        var ball = arkanoid.ball;
 
-        ship.x =  parseInt(playground.offsetLeft + (playground.width - ship.width) / 2);
+        renderPlayground();
+        renderBlocks();
+
+        ship.x =  parseInt((playground.width - ship.width) / 2);
         ship.y = parseInt(playground.height - ship.height - ship.float);
 
         $('#ship').css({
             'width': ship.width,
             'height': ship.height
+        });
+
+        ball.x = ship.x + ship.width / 2 - ball.diameter / 2;
+        ball.y = ship.y - ball.diameter;
+
+        console.log(ball.x);
+        console.log(ball.y);
+
+        $('#ball').css({
+            'width': ball.diameter,
+            'height': ball.diameter,
         });
     }
 
@@ -136,8 +150,6 @@ function App() {
                         ship.x = playground.width - ship.width;
                     }
                     return;
-                default:
-                    console.log(ship.x);
             }
         });
 
@@ -145,9 +157,7 @@ function App() {
 
     this.start = function() {
 
-        renderPlayground();
-        renderBlocks();
-        resetShip();
+        reset();
 
         window.requestAnimationFrame(render);
 
