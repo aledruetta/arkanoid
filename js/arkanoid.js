@@ -3,7 +3,7 @@ function App() {
     var arkanoid = {
         playground: {
             width: 450,
-            height: 600,
+            height: 500,
             offsetTop : $('#playground').offset().top,
             offsetLeft : $('#playground').offset().left
         },
@@ -19,12 +19,13 @@ function App() {
             diameter: 10,
             speed: 5,
             x: 0,
-            y: 0
+            y: 0,
+            isReleased: false
         },
         block: {
             lines: 6,
             blocksPerLine: 9,
-            height: 15,
+            height: 20,
             margin: 1,
             // block.colors.length should match block.lines
             colors: ['gray', 'yellow', 'red', 'blue', 'green', 'purple']
@@ -61,11 +62,19 @@ function App() {
 
     function renderBall() {
         var ball = arkanoid.ball;
+        var ship = arkanoid.ship;
 
-        $('#ball').css({
-            'top': ball.y,
-            'left': ball.x
-        });
+        if (ball.isReleased) {
+            $('#ball').css({
+                'top': ball.y,
+                'left': ball.x
+            });
+        } else {
+            $('#ball').css({
+                'top': ball.y,
+                'left': parseInt(ship.x + ship.width / 2 - ball.diameter / 2)
+            });
+        }
     }
 
     function renderBlocks() {
@@ -117,8 +126,8 @@ function App() {
             'height': ship.height
         });
 
-        ball.x = ship.x + ship.width / 2 - ball.diameter / 2;
-        ball.y = ship.y - ball.diameter;
+        ball.x = parseInt(ship.x + ship.width / 2 - ball.diameter / 2);
+        ball.y = parseInt(ship.y - ball.diameter);
 
         console.log(ball.x);
         console.log(ball.y);
@@ -131,11 +140,15 @@ function App() {
 
     function handleKeyInputs () {
 
-        var ship = arkanoid.ship;
         var playground = arkanoid.playground;
+        var ship = arkanoid.ship;
+        var ball = arkanoid.ball;
 
         $(document).keydown(function(e) {
             switch (e.keyCode ? e.keyCode : e.wich) {
+                case 32:
+                    ball.isReleased = true;
+                    return;
                 case 37:
                     if (ship.x - ship.speed >= 0) {
                         ship.x -= ship.speed;
