@@ -124,7 +124,7 @@ function App() {
 
         ball.x = parseInt(ship.x + ship.width / 2 - ball.diameter / 2);
         ball.y = parseInt(ship.y - ball.diameter);
-        ball.directionX = 1;
+        ball.directionX = Math.round(Math.random()) ? 1 : -1;
         ball.directionY = -1;
 
         $('#ball').css({
