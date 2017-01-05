@@ -16,7 +16,8 @@ function App() {
         },
         ball: {
             diameter: 10,
-            speed: 5,
+            speedX: 5,
+            speedY: 5,
             x: 0,
             y: 0,
             isReleased: false,
@@ -171,14 +172,15 @@ function App() {
         boundaryDetection();
         blockDetection();
 
-        ball.y += ball.speed * ball.directionY;
-        ball.x += ball.speed * ball.directionX;
+        ball.y += ball.speedY * ball.directionY;
+        ball.x += ball.speedX * ball.directionX;
     }
 
     function boundaryDetection() {
 
         var playground = arkanoid.playground;
         var ball = arkanoid.ball;
+        var ship = arkanoid.ship;
 
         var hitTop = ball.y <= 0;
         var hitBottom = ball.y >= playground.height - ball.diameter;
@@ -186,7 +188,10 @@ function App() {
         var hitRight = ball.x >= playground.width - ball.diameter;
 
         if (ballHitShip()) {
+            var point = Math.abs(parseInt((ship.width / 2) - ((ball.x + ball.diameter / 2) - ship.x)));
             ball.directionY = -1;
+            ball.speedX = parseInt(point / 5) + 2;
+            console.log(ball.speedX);
         } else if (hitBottom) {
             reset();
             return;
