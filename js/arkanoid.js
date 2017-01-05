@@ -120,6 +120,8 @@ function App() {
             'width': ball.diameter,
             'height': ball.diameter,
         });
+
+        $('.block').css('visibility', 'visible');
     }
 
     function handleKeyInputs() {
