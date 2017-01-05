@@ -4,8 +4,7 @@ function App() {
         playground: {
             width: 450,
             height: 500,
-            offsetTop: $('#playground').offset().top,
-            offsetLeft: $('#playground').offset().left
+            padding: 2,
         },
         ship: {
             width: 75,
@@ -22,11 +21,12 @@ function App() {
             y: 0,
             isReleased: false,
             directionX: 1,
-            directionY: -1
+            directionY: 1
         },
         block: {
             lines: 6,
             blocksPerLine: 9,
+            width: 0,
             height: 20,
             margin: 1,
             // block.colors.length should match block.lines
@@ -35,10 +35,8 @@ function App() {
     };
 
     function render() {
-
         renderShip();
         renderBall();
-
         window.requestAnimationFrame(render);
     }
 
@@ -46,7 +44,8 @@ function App() {
 
         $('#playground').css({
             'width': arkanoid.playground.width,
-            'height': arkanoid.playground.height
+            'height': arkanoid.playground.height,
+            'padding': arkanoid.playground.padding
         });
     }
 
@@ -59,30 +58,17 @@ function App() {
     }
 
     function renderBall() {
-        var ball = arkanoid.ball;
-        var ship = arkanoid.ship;
 
-        if (ball.isReleased) {
-            $('#ball').css({
-                'top': ball.y,
-                'left': ball.x
-            });
-        } else {
-            ball.x = parseInt(ship.x + ship.width / 2 - ball.diameter / 2);
-
-            $('#ball').css({
-                'top': ball.y,
-                'left': ball.x
-            });
-        }
+        $('#ball').css({
+            'top': arkanoid.ball.y,
+            'left': arkanoid.ball.x
+        });
     }
 
     function renderBlocks() {
 
         var block = arkanoid.block,
             playground = arkanoid.playground
-
-        block.width = playground.width / block.blocksPerLine;
 
         for (var i = 0; i < block.lines; i++) {
 
@@ -93,14 +79,16 @@ function App() {
 
             for (var j = 0; j < block.blocksPerLine; j++) {
 
-                var $newBlock = $('<span class="block"></span>');
+                var $newBlock = $('<span id="b' + i + j + '" class="block"></span>');
                 $newBlock.css('backgroundColor', color);
                 $('.row').last().append($newBlock);
             }
         }
 
+        block.width = playground.width / block.blocksPerLine - block.margin * 2;
+
         $('.block').css({
-            'width': (playground.width / block.blocksPerLine) - block.margin * 2,
+            'width': block.width,
             'height': block.height - block.margin * 2,
             'margin': block.margin + 'px'
         });
@@ -144,61 +132,101 @@ function App() {
                 case 32:
                     ball.isReleased = true;
                     return;
+
                 case 37:
-                    if (ship.x - ship.speed >= 0) {
-                        ship.x -= ship.speed;
-                    } else {
+                    var shipHitLeft = ship.x - ship.speed <= 0;
+
+                    if (shipHitLeft) {
                         ship.x = 0;
+                    } else {
+                        ship.x -= ship.speed;
                     }
                     return;
+
                 case 39:
-                    if (ship.x + ship.speed <= playground.width - ship.width) {
-                        ship.x += ship.speed;
+                    var shipHitRight = ship.x + ship.speed >= playground.width
+                            + playground.padding * 2 - ship.width;
+
+                    if (shipHitRight) {
+                        ship.x = playground.width + playground.padding * 2
+                                - ship.width;
                     } else {
-                        ship.x = playground.width - ship.width;
+                        ship.x += ship.speed;
                     }
                     return;
             }
         });
-
     }
 
     function moveBall() {
 
+        var ship = arkanoid.ship;
         var ball = arkanoid.ball;
 
-        if (ball.isReleased) {
-            if (ballHitBottom()) {
-                reset();
-                return;
-            } else if (ballHitRight()) {
-                ball.directionX = -1;
-            } else if (ballHitLeft()) {
-                ball.directionX = 1;
-            } else if (ballHitTop()) {
-                ball.directionY = 1;
-            }
+        if (!ball.isReleased) {
+            ball.x = parseInt(ship.x + ship.width / 2 - ball.diameter / 2);
+            return;
+        }
 
-            ball.y += ball.speed * ball.directionY,
-                ball.x += ball.speed * ball.directionX
+        boundaryDetection();
+        blockDetection();
 
+        ball.y += ball.speed * ball.directionY;
+        ball.x += ball.speed * ball.directionX;
+    }
+
+    function boundaryDetection() {
+
+        var playground = arkanoid.playground;
+        var ball = arkanoid.ball;
+
+        var hitTop = ball.y <= 0;
+        var hitBottom = ball.y >= playground.height - ball.diameter;
+        var hitLeft = ball.x <= 0;
+        var hitRight = ball.x >= playground.width - ball.diameter;
+
+        if (ballHitShip()) {
+            ball.directionY = -1;
+        } else if (hitBottom) {
+            reset();
+            return;
+        } else if (hitRight || hitLeft) {
+            ball.directionX *= -1;
+        } else if (hitTop) {
+            ball.directionY = 1;
         }
     }
 
-    function ballHitBottom() {
-        return arkanoid.ball.y > arkanoid.playground.height;
+    function blockDetection() {
+
+        var ball = arkanoid.ball;
+        var block = arkanoid.block;
+        var coor = {x: null, y: null};
+
+        if (ball.y <= block.height * block.lines) {
+
+            coor.y = parseInt(ball.y / block.height);
+            coor.x = parseInt(ball.x / block.width);
+
+            var target = $('#b' + coor.y + coor.x);
+
+            if (target.css('visibility') !== 'hidden') {
+                ball.directionY = 1;
+                target.css('visibility', 'hidden');
+            }
+        }
     }
 
-    function ballHitLeft() {
-        return arkanoid.ball.x < 0;
-    }
+    function ballHitShip() {
+        var ball = arkanoid.ball;
+        var ship = arkanoid.ship;
 
-    function ballHitRight() {
-        return arkanoid.ball.x > arkanoid.playground.width;
-    }
-
-    function ballHitTop() {
-        return arkanoid.ball.y < 0;
+        if (ball.x >= ship.x && ball.x < ship.x + ship.width) {
+            if (ball.y >= ship.y - ship.height) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function gameloop() {
