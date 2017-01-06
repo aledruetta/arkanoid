@@ -42,6 +42,12 @@ function App() {
 
     function renderPlayground() {
 
+        var $playground = $('#playground');
+
+        if ($playground.width() < 450) {
+            arkanoid.playground.height = $(window).height() - arkanoid.playground.padding * 2;
+        }
+
         $('#playground').css({
             'height': arkanoid.playground.height,
             'padding': arkanoid.playground.padding
@@ -69,7 +75,7 @@ function App() {
         var block = arkanoid.block,
             playground = arkanoid.playground
 
-        arkanoid.playground.width = parseInt($('#playground').css('width'));
+        arkanoid.playground.width = Math.floor(parseInt($('#playground').css('width')));
 
         for (var i = 0; i < block.lines; i++) {
 

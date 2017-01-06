@@ -2,14 +2,25 @@
     box-sizing: border-box;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 #playground {
     position: relative;
     box-sizing: content-box;
     max-width: 450px;
     margin: 0 auto;
     background-color: black;
-    border: 4px solid rgb(88, 57, 201);
-    border-radius: 6px;
+}
+
+@media screen and (min-width: 450px) {
+    #playground {
+        border: 4px solid rgb(88, 57, 201);
+        border-radius: 6px;
+        height: 100vh;
+    }
 }
 
 #ship {
