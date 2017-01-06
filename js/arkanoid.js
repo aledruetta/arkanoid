@@ -11,7 +11,7 @@ function App() {
             float: 8,
             x: 0,
             y: 0,
-            speed: 30
+            speed: 20
         },
         ball: {
             diameter: 10,
@@ -93,7 +93,6 @@ function App() {
         }
 
         block.width = playground.width / block.blocksPerLine - block.margin * 2;
-        console.log(block.width);
 
         $('.block').css({
             'width': block.width,
@@ -129,6 +128,16 @@ function App() {
         });
 
         $('.block').css('visibility', 'visible');
+
+        var $touch = $('.touch-tap');
+
+        $touch.css({
+            'width': Math.floor(playground.width / 3),
+            'top': playground.height - $touch.height()
+        });
+
+        $('#tap-center').css('left', Math.floor(playground.width / 3));
+        $('#tap-right').css('left', Math.floor(playground.width * 2 / 3));
     }
 
     function handleKeyInputs() {
@@ -144,28 +153,58 @@ function App() {
                     return;
 
                 case 37:
-                    var shipHitLeft = ship.x - ship.speed <= 0;
-
-                    if (shipHitLeft) {
-                        ship.x = 0;
-                    } else {
-                        ship.x -= ship.speed;
-                    }
+                    leftShipMove();
                     return;
 
                 case 39:
-                    var shipHitRight = ship.x + ship.speed >= playground.width
-                            + playground.padding * 2 - ship.width;
-
-                    if (shipHitRight) {
-                        ship.x = playground.width + playground.padding * 2
-                                - ship.width;
-                    } else {
-                        ship.x += ship.speed;
-                    }
+                    rightShipMove();
                     return;
             }
         });
+    }
+
+    function handleTouchInputs() {
+
+        $('#tap-left').on('click', function() {
+            leftShipMove();
+        });
+
+        $('#tap-center').on('click', function() {
+            arkanoid.ball.isReleased = true;
+        });
+
+        $('#tap-right').on('click', function() {
+            rightShipMove();
+        });
+    }
+
+    function leftShipMove() {
+
+        var ship = arkanoid.ship;
+        var shipHitLeft = ship.x - ship.speed <= 0;
+
+        if (shipHitLeft) {
+            ship.x = 0;
+            return;
+        }
+
+        ship.x -= ship.speed;
+    }
+
+    function rightShipMove() {
+
+        var ship = arkanoid.ship;
+        var playground = arkanoid.playground;
+        var shipHitRight = ship.x + ship.speed >= playground.width
+                + playground.padding * 2 - ship.width;
+
+        if (shipHitRight) {
+            ship.x = playground.width + playground.padding * 2
+                    - ship.width;
+            return;
+        }
+
+            ship.x += ship.speed;
     }
 
     function moveBall() {
@@ -254,6 +293,7 @@ function App() {
         arkanoid.timer = setInterval(gameloop, 1000 / 30);
         window.requestAnimationFrame(render);
         handleKeyInputs();
+        handleTouchInputs();
     }
 }
 

@@ -30,6 +30,12 @@ body {
     box-shadow: 0 0 6px rgb(170, 135, 135);
 }
 
+.touch-tap {
+    position: absolute;
+    border: solid 1px red;
+    height: 120px;
+}
+
 #ball {
     position: absolute;
     background-color: white;
