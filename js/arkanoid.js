@@ -2,7 +2,6 @@ function App() {
 
     var arkanoid = {
         playground: {
-            width: 450,
             height: 500,
             padding: 2,
         },
@@ -12,7 +11,7 @@ function App() {
             float: 8,
             x: 0,
             y: 0,
-            speed: 15
+            speed: 30
         },
         ball: {
             diameter: 10,
@@ -44,7 +43,6 @@ function App() {
     function renderPlayground() {
 
         $('#playground').css({
-            'width': arkanoid.playground.width,
             'height': arkanoid.playground.height,
             'padding': arkanoid.playground.padding
         });
@@ -71,6 +69,8 @@ function App() {
         var block = arkanoid.block,
             playground = arkanoid.playground
 
+        arkanoid.playground.width = parseInt($('#playground').css('width'));
+
         for (var i = 0; i < block.lines; i++) {
 
             var color = block.colors[i];
@@ -87,6 +87,7 @@ function App() {
         }
 
         block.width = playground.width / block.blocksPerLine - block.margin * 2;
+        console.log(block.width);
 
         $('.block').css({
             'width': block.width,
@@ -185,7 +186,7 @@ function App() {
         var ship = arkanoid.ship;
 
         var hitTop = ball.y <= 0;
-        var hitBottom = ball.y >= playground.height - ball.diameter;
+        var hitBottom = ball.y >= ship.y + ball.diameter;
         var hitLeft = ball.x <= 0;
         var hitRight = ball.x >= playground.width - ball.diameter;
 
@@ -193,7 +194,6 @@ function App() {
             var point = Math.abs(parseInt((ship.width / 2) - ((ball.x + ball.diameter / 2) - ship.x)));
             ball.directionY = -1;
             ball.speedX = parseInt(point / 5) + 2;
-            console.log(ball.speedX);
         } else if (hitBottom) {
             reset();
             return;
