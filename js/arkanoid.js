@@ -15,9 +15,9 @@ function App() {
         var windowHeight = $(window).height();
         var $playground = $('#playground');
 
-        this.gameMargin = 4;
+        this.gamePadding = 4;
         this.width = $playground.width();
-        this.height = (this.width < 450) ? (windowHeight - this.gameMargin) : 500;
+        this.height = (this.width < 450) ? (windowHeight - this.gamePadding) : 500;
 
         this.render = function() {
             $playground.css({'height': this.height});
@@ -29,11 +29,11 @@ function App() {
     function Block() {
 
         var colors = ['gray', 'yellow', 'red', 'blue', 'green', 'purple'];
-        var blocksPerLine = 9;
 
+        this.blocksPerLine = 9;
         this.lines = 6;
         this.height = 20;
-        this.width = 100 / blocksPerLine;
+        this.width = 100 / this.blocksPerLine;
 
         this.render = function() {
 
@@ -45,7 +45,7 @@ function App() {
                 var $row = $('<div class="row"></div>');
                 $('#blocks').append($row);
 
-                for (var j = 0; j < blocksPerLine; j++) {
+                for (var j = 0; j < this.blocksPerLine; j++) {
 
                     // Cria o elemento span que representa o bloco, gera o id e adiciona ao DOM
                     var $newBlock = $('<span id="b' + i + j + '" class="block"></span>');
@@ -64,7 +64,7 @@ function App() {
         this.width = 75;
         this.height = 15;
         this.float = 24;
-        this.x = (playground.width - this.width + playground.gameMargin) / 2;
+        this.x = (playground.width - this.width + playground.gamePadding) / 2;
         this.y = playground.height - this.height - this.float;
         this.speed = 20;
 
@@ -83,10 +83,10 @@ function App() {
 
         this.leftMove = function() {
 
-            var shipHitLeft = this.x - this.speed <= 0 + playground.gameMargin / 2;
+            var shipHitLeft = this.x - this.speed <= 0 + playground.gamePadding / 2;
 
             if (shipHitLeft) {
-                this.x = 0 + playground.gameMargin / 2;
+                this.x = 0 + playground.gamePadding / 2;
                 return;
             }
 
@@ -132,11 +132,12 @@ function App() {
             });
         };
 
-        this.hitTop    = function() {return this.y <= 0;};
-        this.hitBottom = function() {return this.y >= ship.y + this.diameter;};
-        this.hitLeft   = function() {return this.x <= playground.gameMargin;};
-        this.hitRight  = function() {return this.x >= playground.width - this.diameter
-                - playground.gameMargin;};
+        this.hitTop    = function() {return this.y <= 0 + playground.gamePadding;};
+        this.hitBottom = function() {return this.y >= ship.y + this.diameter * 2;};
+        this.hitLeft   = function() {return this.x <= playground.gamePadding;};
+        this.hitRight  = function() {
+            return this.x >= playground.width - this.diameter - playground.gamePadding;
+        };
 
         this.hitShip = function() {
 
@@ -175,7 +176,8 @@ function App() {
 
                 var $target = $('#b' + coor.y + coor.x);
 
-                if ($target.css('visibility') !== 'hidden') {
+                if (coor.x < block.blocksPerLine && $target.css('visibility') !== 'hidden') {
+                    console.log(coor.x);
                     this.directionY = 1;
                     $target.css('visibility', 'hidden');
                 }

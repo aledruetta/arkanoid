@@ -10,13 +10,13 @@ body {
 #game {
     max-width: 462px;
     margin: 0 auto;
+    padding: 2px;
     background-color: black;
 }
 
 #playground {
     position: relative;
     display: flex;
-    margin: 2px;
 }
 
 @media screen and (min-width: 462px) {
