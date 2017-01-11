@@ -7,19 +7,22 @@ body {
     padding: 0;
 }
 
-#playground {
-    position: relative;
-    box-sizing: content-box;
-    max-width: 450px;
+#game {
+    max-width: 462px;
     margin: 0 auto;
     background-color: black;
 }
 
-@media screen and (min-width: 450px) {
-    #playground {
+#playground {
+    position: relative;
+    display: flex;
+    margin: 2px;
+}
+
+@media screen and (min-width: 462px) {
+    #game {
         border: 4px solid rgb(88, 57, 201);
         border-radius: 6px;
-        height: 100vh;
     }
 }
 
@@ -45,14 +48,21 @@ body {
     border-radius: 50%;
 }
 
+#blocks {
+    position: absolute;
+    width: 100%;
+}
+
 .row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin: 2px 0;
 }
 
 .block {
     display: block;
     border: 1px solid rgb(145, 180, 168);
     border-radius: 3px;
+    margin: 0 1px;
 }
