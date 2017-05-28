@@ -5,7 +5,12 @@
   "repository": "git@github.com:aledruetta/arkanoid.git",
   "author": "Alejandro Druetta <aledruetta@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "inline": "htmlprocessor src/index.html -o dist/index-inline.html",
+    "minify": "html-minifier -c html-minifier.conf dist/index-inline.html -o dist/index.html && rm dist/index-inline.html"
+  },
   "dependencies": {
-    "html-inline": "^1.2.0"
+    "html-minifier": "^3.5.2",
+    "htmlprocessor": "^0.2.4"
   }
 }

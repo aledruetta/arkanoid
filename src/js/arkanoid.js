@@ -95,8 +95,7 @@ function App() {
 
         this.rightMove = function() {
 
-            var shipHitRight = this.x + this.speed >= playground.width
-                    - this.width;
+            var shipHitRight = this.x + this.speed >= playground.width - this.width;
 
             if (shipHitRight) {
                 this.x = playground.width - this.width;
@@ -211,8 +210,6 @@ function App() {
 
     function Touch() {
 
-        this.diameter;
-
         this.touchControls = function() {
 
             this.diameter = Math.floor((playground.width / 3) * 0.9);
@@ -318,7 +315,7 @@ function App() {
 
         handleKeyInputs();
         handleTouchInputs();
-    }
+    };
 }
 
 
