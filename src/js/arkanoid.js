@@ -239,9 +239,10 @@ function App() {
             });
         };
 
-        if (!isMobileDevice()) {
-            this.touchControls();
-        }
+        // FIXME: detect mobile isn't working
+        // if (!isMobileDevice()) {
+        this.touchControls();
+        // }
 
         function isMobileDevice() {
 
