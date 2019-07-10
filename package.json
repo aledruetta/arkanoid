@@ -11,7 +11,8 @@
     "dist": "yarn run inline && yarn run minify"
   },
   "dependencies": {
-    "html-minifier": "^3.5.2",
-    "htmlprocessor": "^0.2.4"
+    "html-minifier": "^4.0.0",
+    "htmlprocessor": "^0.2.6",
+    "no-case": "2.3.2"
   }
 }
