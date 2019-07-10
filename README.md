@@ -1,5 +1,5 @@
 # arkanoid
 HTML5 Arkanoid like arcade game
 
-[git@github.com:aledruetta/arkanoid.git](git@github.com:aledruetta/arkanoid.git)
+[https://aledruetta.github.io/arkanoid/dist/](https://aledruetta.github.io/arkanoid/dist/)
 
