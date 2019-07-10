@@ -13,7 +13,7 @@
   "dependencies": {
     "html-minifier": "^4.0.0",
     "htmlprocessor": "^0.2.6",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "no-case": "2.3.2"
   }
 }
